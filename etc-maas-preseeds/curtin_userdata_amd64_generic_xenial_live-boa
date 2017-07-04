@@ -25,7 +25,7 @@ late_commands:
   driver_06_depmod: ["curtin", "in-target", "--", "depmod"]
   driver_07_update_initramfs: ["curtin", "in-target", "--", "update-initramfs", "-u"]
 {{endif}}
-  disable_reboot: touch /run/block-curtin-poweroff /tmp/block-poweroff /tmp/block-reboot
+#  disable_reboot: touch /run/block-curtin-poweroff /tmp/block-poweroff /tmp/block-reboot
   driver_10_clone_repo: ["curtin", "in-target", "--", "git", "clone","--config","http.proxy={{server_host}}:8000","--config", "https.proxy={{server_host}}:8000", "https://github.com/dhague/maas-k8s.git", "/opt/maas-k8s"]
 #  driver_11_clone_repo: curtin in-target -- sh -c "git clone https://github.com/dhague/maas-k8s.git --config http.proxy={{server_host}}:8000 /tmp/maas-k8si"
   driver_12_run_script: curtin in-target -- sh -c "cd /opt/maas-k8s/scripts/{{node.hostname}}i && install.sh || echo Failed for {{node.hostname}}."
