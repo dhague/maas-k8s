@@ -4,9 +4,9 @@ debconf_selections:
   {{for line in str(curtin_preseed).splitlines()}}
   {{line}}
   {{endfor}}
+#  disable_reboot: touch /run/block-curtin-poweroff /tmp/block-poweroff /tmp/block-reboot
 {{if third_party_drivers and driver}}
 early_commands:
-  disable_reboot: touch /run/block-curtin-poweroff /tmp/block-poweroff /tmp/block-reboot
   {{py: key_string = ''.join(['\\x%x' % x for x in map(ord, driver['key_binary'])])}}
   driver_00_get_key: /bin/echo -en '{{key_string}}' > /tmp/maas-{{driver['package']}}.gpg
   driver_01_add_key: ["apt-key", "add", "/tmp/maas-{{driver['package']}}.gpg"]
@@ -25,12 +25,10 @@ late_commands:
   driver_06_depmod: ["curtin", "in-target", "--", "depmod"]
   driver_07_update_initramfs: ["curtin", "in-target", "--", "update-initramfs", "-u"]
 {{endif}}
-#  driver_08_proxy_show: ["curtin", "in-target", "--", "sh", "-c", "\"echo {{proxy}}\""]
-#  driver_08_apt_update: ["curtin", "in-target", "--", "apt-get", "update", "--quiet"]
-#  driver_09_install_git: ["curtin", "in-target", "--", "apt-get", "-y", "install", "git"]
-  driver_10_clone_repo: ["curtin", "in-target", "--", "git", "clone","--config","http.proxy={{server_host}}:3128","--config", "https.proxy={{server_host}}:3128", "https://github.com/dhague/maas-k8s.git", "/tmp/maas-k8s"]
-#  driver_11_clone_repo: curtin in-target -- sh -c "git clone https://github.com/dhague/maas-k8s.git --config \"https.proxy={{server_host}}:3128\"  --config \"http.proxy={{server_host}}:3128\" /tmp/maas-k8s"
-  driver_12_run_install: curtin in-target -- sh -c "cd /tmp/maas-k8s/scripts && `hostname`.sh"
+  disable_reboot: touch /run/block-curtin-poweroff /tmp/block-poweroff /tmp/block-reboot
+  driver_10_clone_repo: ["curtin", "in-target", "--", "git", "clone","--config","http.proxy={{server_host}}:8000","--config", "https.proxy={{server_host}}:8000", "https://github.com/dhague/maas-k8s.git", "/opt/maas-k8s"]
+#  driver_11_clone_repo: curtin in-target -- sh -c "git clone https://github.com/dhague/maas-k8s.git --config http.proxy={{server_host}}:8000 /tmp/maas-k8si"
+  driver_12_run_script: curtin in-target -- sh -c "cd /opt/maas-k8s/scripts/{{node.hostname}}i && install.sh || echo Failed for {{node.hostname}}."
 showtrace: true
 verbosity: 3
 
