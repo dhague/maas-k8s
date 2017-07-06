@@ -2,6 +2,8 @@
 
 : ${MAAS_GW:=192.168.8.254}
 : ${INET_GW:=192.168.0.4}
+: ${TOKEN:=$1}
+: ${K8S_HOSTIP:=$2}
 
 # Use Internet LAN for default route
 sudo route add default gw $INET_GW    # Internet LAN
@@ -23,19 +25,9 @@ cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list > /dev/null
 deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-get install -y kubeadm kubectl
 
-# Initialise K8S Master
-sudo kubeadm init
-
-# Set up kube config
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-# Set up WeaveNet pod networking
-kubectl  apply -f https://git.io/weave-kube-1.6
-
-# Add dashboard
-kubectl create -f https://git.io/kube-dashboard
+# Join K8S Master
+sudo kubeadm reset # Workaround for https://github.com/kubernetes/kubeadm/issues/1
+sudo kubeadm join --token $TOKEN $K8S_HOSTIP
 
