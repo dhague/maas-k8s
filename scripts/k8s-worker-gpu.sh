@@ -1,4 +1,13 @@
 #/bin/bash
+: ${TOKEN:=$1}
+: ${K8S_HOSTIP:=$2}
+
+: ${NVIDIA_VERSION:=375}
+
+./network.sh
+./docker.sh
+./k8s-packages.sh
+
 wget --directory-prefix=/tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb
 sudo dpkg -i /tmp/nvidia-docker_1.0.1-1_amd64.deb
 #sudo ln -s .../volumes/nvidia_driver/375.31 /usr/local/lib/nvidia

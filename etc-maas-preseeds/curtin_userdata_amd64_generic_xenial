@@ -29,7 +29,10 @@ late_commands:
   driver_10_clone_repo: ["curtin", "in-target", "--", "git", "clone","--config","http.proxy={{server_host}}:8000","--config", "https.proxy={{server_host}}:8000", "https://github.com/dhague/maas-k8s.git", "/opt/maas-k8s"]
 {{if 'nvidiadriver' in (node.tag_names())}}  
   driver_11_disable_nouveau: curtin in-target -- sh -c "cat /opt/maas-k8s/modprobe-blacklist.conf >> /etc/modprobe.d/blacklist.conf"
-  driver_12_install_nvidia: curtin in-target -- sh -c "export NVIDIA_VERSION=375 && export CUDA_VERSION=8.0.61-1 && wget --directory-prefix=/tmp https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_$CUDA_VERSION_amd64.deb && sudo dpkg -i /tmp/cuda-repo-ubuntu1604_$CUDA_VERSION_amd64.deb && sudo apt-get update && sudo apt-get install -y nvidia-$NVIDIA_VERSION nvidia-$NVIDIA_VERSION-dev libcuda1-$NVIDIA_VERSION nvidia-modprobe --no-install-recommends"
+  {{py: NVIDIA_VERSION = '375'}}
+  {{py: CUDA_VERSION = '8.0.61-1'}}
+  driver_12_install_nvidia: curtin in-target -- sh -c "export https_proxy=http://{{server_host}}:8000 && wget --directory-prefix=/tmp https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_{{CUDA_VERSION}}_amd64.deb && sudo dpkg -i /tmp/cuda-repo-ubuntu1604_{{CUDA_VERSION}}_amd64.deb && sudo apt-get update && sudo apt-get install -y nvidia-{{NVIDIA_VERSION}} nvidia-{{NVIDIA_VERSION}}-dev libcuda1-{{NVIDIA_VERSION}} nvidia-modprobe --no-install-recommends --allow-unauthenticated"
+  # --allow-unauthenticated used above because the gpg key can't be got without figuring out how to use the proxy, and I am lazy.
 {{endif}}  
 showtrace: true
 verbosity: 3
