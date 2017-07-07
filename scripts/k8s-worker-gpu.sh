@@ -19,7 +19,7 @@ grep -q 'route add default' /etc/network/interfaces || sudo sed -i '/inet dhcp/a
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable"
 sudo apt-get update 
-sudo apt-get install -y docker-ce--directory-prefix=
+sudo apt-get install -y docker-ce
 
 # GPU drivers
 #sudo add-apt-repository -y ppa:graphics-drivers
