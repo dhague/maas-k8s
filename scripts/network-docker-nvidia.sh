@@ -25,11 +25,11 @@ sudo apt-get install -y docker-ce
 #sudo add-apt-repository -y ppa:graphics-drivers
 #sudo apt-get update
 #sudo apt-get install -y nvidia-$NVIDIA_VERSION nvidia-modprobe --no-install-recommends
-wget --directory-prefix=/tmp https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
-sudo dpkg -i /tmp/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
-sudo apt-get update
-sudo apt-get install -y nvidia-$NVIDIA_VERSION nvidia-$NVIDIA_VERSION-dev libcuda1-$NVIDIA_VERSION nvidia-modprobe --no-install-recommends
+#wget --directory-prefix=/tmp https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
+#sudo dpkg -i /tmp/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
+#sudo apt-get update
+#sudo apt-get install -y nvidia-$NVIDIA_VERSION nvidia-$NVIDIA_VERSION-dev libcuda1-$NVIDIA_VERSION nvidia-modprobe --no-install-recommends
 
-echo sudo shutdown -r now
+#echo sudo shutdown -r now
 # After this reboot, run k8s-worker-gpu.sh
 
