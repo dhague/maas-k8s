@@ -19,29 +19,30 @@ grep -q 'route add default' /etc/network/interfaces || sudo sed -i '/inet dhcp/a
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable"
 sudo apt-get update 
-sudo apt-get install -y docker-ce
+sudo apt-get install -y docker-ce--directory-prefix=
 
 # GPU drivers
 #sudo add-apt-repository -y ppa:graphics-drivers
 #sudo apt-get update
 #sudo apt-get install -y nvidia-$NVIDIA_VERSION nvidia-modprobe --no-install-recommends
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
-sudo dpkg -i cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
-#sudo apt-get update
-#sudo apt-get install -y nvidia-$NVIDIA_VERSION nvidia-$NVIDIA_VERSION-dev libcuda1-$NVIDIA_VERSION nvidia-modprobe --no-install-recommends
+wget --directory-prefix=/tmp https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
+sudo dpkg -i /tmp/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
+sudo apt-get update
+sudo apt-get install -y nvidia-$NVIDIA_VERSION nvidia-$NVIDIA_VERSION-dev libcuda1-$NVIDIA_VERSION nvidia-modprobe --no-install-recommends
 
-wget https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb
-sudo dpkg -i nvidia-docker_1.0.1-1_amd64.deb
+# Might possibly need a reboot at this point - or a modprobe?
+
+wget --directory-prefix=/tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb
+#sudo dpkg -i /tmp/nvidia-docker_1.0.1-1_amd64.deb
 #sudo ln -s .../volumes/nvidia_driver/375.31 /usr/local/lib/nvidia
-# Might possibly need a reboot at this point
 
 # Install kubectl, kubelet and kubeadm
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list > /dev/null
-deb http://apt.kubernetes.io/ kubernetes-xenial main
-EOF
-sudo apt-get update
-sudo apt-get install -y kubeadm kubectl
+#curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+#cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list > /dev/null
+#deb http://apt.kubernetes.io/ kubernetes-xenial main
+#EOF
+#sudo apt-get update
+#sudo apt-get install -y kubeadm kubectl
 
 # Join K8S Master
 #sudo kubeadm reset # Workaround for https://github.com/kubernetes/kubeadm/issues/1
