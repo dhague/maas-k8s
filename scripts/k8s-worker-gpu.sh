@@ -10,7 +10,8 @@
 
 wget --directory-prefix=/tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb
 sudo dpkg -i /tmp/nvidia-docker_1.0.1-1_amd64.deb
-sudo ln -s /var/lib/nvidia-docker/volumes/nvidia_driver/* /usr/local/lib/nvidia
+sudo ln -s /usr/lib/nvidia-$NVIDIA_VERSION /usr/local/lib/nvidia
+sudo cp /usr/lib/x86_64-linux-gnu/libcuda* /usr/local/lib/nvidia
 
 NVIDIA_GPU_NAME=$(nvidia-smi --query-gpu=gpu_name --format=csv,noheader --id=0)
 cat <<EOF | sudo tee /etc/systemd/system/kubelet.service.d/override.conf > /dev/null
