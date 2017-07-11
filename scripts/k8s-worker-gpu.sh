@@ -16,7 +16,7 @@ sudo cp /usr/lib/x86_64-linux-gnu/libcuda* /usr/local/lib/nvidia
 NVIDIA_GPU_NAME=$(nvidia-smi --query-gpu=gpu_name --format=csv,noheader --id=0)
 cat <<EOF | sudo tee /etc/systemd/system/kubelet.service.d/override.conf > /dev/null
 [Service]
-Environment="KUBELET_EXTRA_ARGS=--feature-gates='Accelerators=true' --node-labels='alpha.kubernetes.io/nvidia-gpu-name=$NVIDIA_GPU_NAME'"
+Environment="KUBELET_EXTRA_ARGS=--feature-gates='Accelerators=true' --node-labels='alpha.kubernetes.io/nvidia-gpu-name=${NVIDIA_GPU_NAME// /-}'"
 EOF
 
 # Join K8S Master
