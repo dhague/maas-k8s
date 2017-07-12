@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cpu-test-pod
+  labels:
+    app: cpu-test
+spec:
+  volumes:
+  containers:
+  - name: tensorflow
+    image: gcr.io/tensorflow/tensorflow
+    env:
+    ports:
+    - containerPort: 8888
+    resources:

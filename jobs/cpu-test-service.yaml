@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: cpu-test-service
+spec:
+  selector:
+    app: cpu-test
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+  type: LoadBalancer
+
