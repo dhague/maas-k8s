@@ -13,3 +13,10 @@ spec:
     ports:
     - containerPort: 8888
     resources:
+    volumeMounts:
+    - name: nfs
+      mountPath: "/mnt"
+  volumes:
+    - name: nfs
+      persistentVolumeClaim:
+        claimName: nfs  
