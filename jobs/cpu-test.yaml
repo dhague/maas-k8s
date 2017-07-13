@@ -13,13 +13,15 @@ spec:
     ports:
     - containerPort: 8888
     resources:
+    imagePullPolicy: IfNotPresent
     volumeMounts:
-    - name: nfs
+    - name: nfs-cpu
       mountPath: "/mnt"
+      readOnly: false
   volumes:
-    - name: nfs
+    - name: nfs-cpu
       persistentVolumeClaim:
-        claimName: nfs
+        claimName: nfs-pvc
 ---
 kind: Service
 apiVersion: v1

@@ -43,5 +43,6 @@ spec:
       port: 20048
     - name: rpcbind
       port: 111
+  clusterIP: 10.99.197.113
   selector:
     role: nfs-server    
