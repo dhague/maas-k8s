@@ -12,5 +12,5 @@ grep -q 'route delete default' /etc/network/interfaces || sudo sed -i '/inet sta
 grep -q 'route add default' /etc/network/interfaces || sudo sed -i '/inet dhcp/a \    up route add default gw '$INET_GW /etc/network/interfaces
 
 # Make sure we can mount NFS (host needs to be able to do this for Kubernetes to do it)
-sudo apt-get install nfs-common
+sudo apt-get install -y nfs-common
 

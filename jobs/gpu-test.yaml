@@ -24,3 +24,17 @@ spec:
     - name: nvidia-driver
       mountPath: /usr/local/nvidia/
       readOnly: true
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: gpu-test-service
+spec:
+  selector:
+    app: gpu-test
+  ports:
+    - protocol: TCP
+      port: 38888
+      targetPort: 8888
+  type: NodePort
+

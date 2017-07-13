@@ -19,4 +19,18 @@ spec:
   volumes:
     - name: nfs
       persistentVolumeClaim:
-        claimName: nfs  
+        claimName: nfs
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cpu-test-service
+spec:
+  selector:
+    app: cpu-test
+  ports:
+    - protocol: TCP
+      port: 48888
+      targetPort: 8888
+  type: NodePort
+        
