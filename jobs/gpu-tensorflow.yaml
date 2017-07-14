@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: gpu-tensorflow
+  labels:
+    app: gpu-tensorflow
+spec:
+  replicas: 1
+  selector:
+    name: gpu-tensorflow
+  template:
+    metadata:
+      labels:
+        name: gpu-tensorflow
+        app: gpu-tensorflow
+    spec:
+      containers:
+      - name: tensorflow
+        image: gcr.io/tensorflow/tensorflow:latest-gpu
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LD_LIBRARY_PATH
+          value: /usr/local/nvidia
+        ports:
+        - containerPort: 8888
+        resources:
+          limits:
+            alpha.kubernetes.io/nvidia-gpu: 1
+        volumeMounts:
+        - name: nvidia-driver
+          mountPath: /usr/local/nvidia/
+          readOnly: true
+        - name: nfs-gpu
+          mountPath: "/notebooks"
+          readOnly: false
+      volumes:
+      - name: nvidia-driver
+        hostPath:
+          path: /usr/local/lib/nvidia
+      - name: nfs-gpu
+        persistentVolumeClaim:
+          claimName: nfs-jupyter-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: gpu-tensorflow-service
+spec:
+  selector:
+    app: gpu-tensorflow
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+  type: NodePort
+
