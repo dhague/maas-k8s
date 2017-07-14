@@ -1,6 +1,6 @@
 #/bin/bash
-: ${TOKEN:=$1}
-: ${K8S_HOSTIP:=$2}
+: ${K8S_HOSTIP:=$1}
+: ${TOKEN:=$2}
 
 : ${NVIDIA_VERSION:=375}
 
