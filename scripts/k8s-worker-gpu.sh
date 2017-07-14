@@ -7,6 +7,7 @@
 ./network.sh
 ./docker.sh
 ./k8s-packages.sh
+./cachefilesd.sh
 
 wget --directory-prefix=/tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb
 sudo dpkg -i /tmp/nvidia-docker_1.0.1-1_amd64.deb

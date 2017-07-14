@@ -3,12 +3,15 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: nfs-jupyter-pv
+  annotations:
+    volume.beta.kubernetes.io/mount-options: "fsc"
 spec:
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
+#  mountOptions: "fsc"
   nfs:
     server: 10.99.197.113 # service clusterIP as defined in nfs-server.yaml
     path: "/exports/notebooks"
