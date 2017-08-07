@@ -25,7 +25,8 @@ spec:
       hostPath:
         path: /exports
   nodeSelector:
-    node-role.kubernetes.io/master:
+    nfs-server: "true"
+#    node-role.kubernetes.io/master:
   tolerations: 
   - key: "node-role.kubernetes.io/master"
     operator: "Exists"

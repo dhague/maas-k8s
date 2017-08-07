@@ -1,4 +1,4 @@
-#/bin/bash
+#!/usr/bin/env bash
 
 # Create kubelet service override file to enable GPU support
 sudo mkdir /etc/systemd/system/kubelet.service.d

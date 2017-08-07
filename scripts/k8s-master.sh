@@ -1,4 +1,4 @@
-#/bin/bash
+#!/usr/bin/env bash
 # If an parameter is specified, use it to match the desired API server subnet address (e.g. '192.168.8.0')
 if [ '' != "$1" ] ; then
   MASTER_IP=`ip addr show  | grep "inet\b" | awk '{print $2}' | cut -d/ -f1 | grep "${1/%.0/}"`

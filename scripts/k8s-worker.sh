@@ -1,4 +1,4 @@
-#/bin/bash
+#!/usr/bin/env bash
 : ${K8S_HOSTIP:=$1}
 : ${TOKEN:=$2}
 # Token must match regex [a-z0-9]{6}\.[a-z0-9]{16}
