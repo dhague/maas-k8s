@@ -5,7 +5,7 @@ do
     if [ -e $SCRIPT.sh ]
     then
         echo "Running $SCRIPT.sh"
-        ./$SCRIPT.sh $@ && echo "$SCRIPT.sh succeeded" || echo "$SCRIPT.sh failed"
+        source ./$SCRIPT.sh $@ && echo "$SCRIPT.sh succeeded" || echo "$SCRIPT.sh failed"
     fi
 done < ../../node_tags
 
