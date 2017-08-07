@@ -16,6 +16,7 @@ fi
 ./k8s-packages.sh
 
 # Initialise K8S Master
+echo Running: kubeadm init $MASTER_IP_ARG $TOKEN_ARG
 sudo kubeadm init $MASTER_IP_ARG $TOKEN_ARG
 
 # Set up kube config
