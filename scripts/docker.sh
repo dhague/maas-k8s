@@ -5,5 +5,14 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt-get update 
 sudo apt-get install -y docker-ce
 
-# Copy proxy lines from /etc/environment to /etc/default/docker
-for line in $( grep proxy /etc/environment ) ; do echo 'export '$line | sudo tee -a /etc/default/docker > /dev/null ; done
+# Configure Docker's proxy settings based on /etc/environment
+if grep -q PROXY /etc/environment ; then
+    sudo mkdir -p /etc/systemd/system/docker.service.d
+    cat <<EOF |head -c -1| sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf > /dev/null
+[Service]
+Environment=
+EOF
+    for line in $( grep PROXY /etc/environment ) ; do echo -n '"'$line'" ' | sudo tee -a /etc/systemd/system/docker.service.d/http-proxy.conf > /dev/null ; done
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+fi
