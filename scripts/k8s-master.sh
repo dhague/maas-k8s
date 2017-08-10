@@ -20,8 +20,11 @@ fi
 ./k8s-packages.sh
 
 # Initialise K8S Master
+: ${PODNET_CIDR:="192.168.0.0/16"}
 if [ "$POD_NETWORK" == "calico" ] ; then
-    POD_NETWORK_ARG=--pod-network-cidr=192.168.0.0/16
+    POD_NETWORK_ARG='--pod-network-cidr='$PODNET_CIDR
+else
+    WEAVE_NETWORK_ARG='&env.IPALLOC_RANGE='$PODNET_CIDR
 fi
 echo Running: kubeadm init $MASTER_IP_ARG $TOKEN_ARG $POD_NETWORK_ARG
 sudo kubeadm init $MASTER_IP_ARG $TOKEN_ARG $POD_NETWORK_ARG
@@ -36,7 +39,7 @@ if [ "$POD_NETWORK" == "calico" ] ; then
     kubectl apply -f https://docs.projectcalico.org/v2.4/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
 else
     # Set up WeaveNet pod networking
-    kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+    kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')$WEAVE_NETWORK_ARG"
 fi
 
 # Add dashboard
