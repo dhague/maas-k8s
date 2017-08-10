@@ -45,7 +45,7 @@ kubectl create -f https://git.io/kube-dashboard
 # Create a browser certificate file from .kube/config
 sudo apt install -y python-pip
 pip install shyaml
-shyaml get-value users.0.user.client-certificate-data < .kube/config | base64 -d > k8s-admin-cert.cer
-shyaml get-value users.0.user.client-key-data < .kube/config | base64 -d > k8s-admin-key.cer
-openssl pkcs12 -inkey k8s-admin-key.cer -in k8s-admin-cert.cer -export -out k8s-admin.pfx -passout pass:
+shyaml get-value users.0.user.client-certificate-data < ~/.kube/config | base64 -d > ~/k8s-admin-cert.cer
+shyaml get-value users.0.user.client-key-data < ~/.kube/config | base64 -d > ~/k8s-admin-key.cer
+openssl pkcs12 -inkey ~/k8s-admin-key.cer -in ~/k8s-admin-cert.cer -export -out ~/k8s-admin.pfx -passout pass:
 
