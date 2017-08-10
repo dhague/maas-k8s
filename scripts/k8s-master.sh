@@ -28,8 +28,13 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-# Set up WeaveNet pod networking
-kubectl apply -f https://git.io/weave-kube-1.6
+if [ "$POD_NETWORK" == "calico" ] ; then
+    # Set up Calico pod networking
+    kubectl apply -f https://docs.projectcalico.org/v2.1/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml
+else
+    # Set up WeaveNet pod networking
+    kubectl apply -f https://git.io/weave-kube-1.6
+fi
 
 # Add dashboard
 kubectl create -f https://git.io/kube-dashboard
