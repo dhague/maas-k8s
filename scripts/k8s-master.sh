@@ -30,7 +30,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 if [ "$POD_NETWORK" == "calico" ] ; then
     # Set up Calico pod networking
-    kubectl apply -f https://docs.projectcalico.org/v2.1/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml
+    kubectl apply -f https://docs.projectcalico.org/v2.4/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
 else
     # Set up WeaveNet pod networking
     kubectl apply -f https://git.io/weave-kube-1.6
