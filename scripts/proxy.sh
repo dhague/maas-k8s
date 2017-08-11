@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 if [ '' != "$PROXY_URL" ] ; then
     cat <<EOF | sudo tee /etc/apt.conf > /dev/null
-    Acquire::http::Proxy "$PROXY_URL";
-    EOF
+Acquire::http::Proxy "$PROXY_URL";
+EOF
 
     cat <<EOF | sudo tee -a /etc/environment > /dev/null
 http_proxy=$PROXY_URL
