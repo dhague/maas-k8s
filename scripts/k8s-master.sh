@@ -6,8 +6,12 @@ fi
 if [ '' != "$MASTER_IP" ] ; then
   MASTER_IP_ARG="--apiserver-advertise-address=$MASTER_IP"
 fi
-if [ '' != "$2" ] ; then
-  TOKEN=$2
+: ${MASTER_HOSTPORT:=$2}
+if [ '' != "$MASTER_PORT" ] ; then
+  MASTER_PORT_ARG="--apiserver-bind-port=$MASTER_PORT"
+fi
+if [ '' != "$3" ] ; then
+  TOKEN=$3
   # Token must match regex [a-z0-9]{6}\.[a-z0-9]{16}
   [[ $TOKEN =~ ^[a-z0-9]{6}\.[a-z0-9]{16}$ ]] || (echo "`basename "$0"`: Token is invalid" && exit 1)
 fi
@@ -26,8 +30,8 @@ if [ "$POD_NETWORK" == "calico" ] ; then
 else
     WEAVE_NETWORK_ARG='&env.IPALLOC_RANGE='$PODNET_CIDR
 fi
-echo Running: kubeadm init $MASTER_IP_ARG $TOKEN_ARG $POD_NETWORK_ARG
-sudo -E kubeadm init $MASTER_IP_ARG $TOKEN_ARG $POD_NETWORK_ARG
+echo Running: kubeadm init $MASTER_IP_ARG $MASTER_PORT_ARG $TOKEN_ARG $POD_NETWORK_ARG
+sudo -E kubeadm init $MASTER_IP_ARG $MASTER_PORT_ARG $TOKEN_ARG $POD_NETWORK_ARG
 
 # Set up kube config
 mkdir -p $HOME/.kube
