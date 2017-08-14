@@ -27,7 +27,7 @@ else
     WEAVE_NETWORK_ARG='&env.IPALLOC_RANGE='$PODNET_CIDR
 fi
 echo Running: kubeadm init $MASTER_IP_ARG $TOKEN_ARG $POD_NETWORK_ARG
-sudo kubeadm init $MASTER_IP_ARG $TOKEN_ARG $POD_NETWORK_ARG
+sudo -E kubeadm init $MASTER_IP_ARG $TOKEN_ARG $POD_NETWORK_ARG
 
 # Set up kube config
 mkdir -p $HOME/.kube
@@ -54,3 +54,17 @@ kubectl config view --flatten | grep client-certificate-data |  # Get the client
    base64 -d > ~/k8s-admin-cert.cer
 openssl pkcs12 -inkey ~/k8s-admin-key.cer -in ~/k8s-admin-cert.cer -export -out ~/k8s-admin.pfx -passout pass:
 
+# Get rid of the (proxy) env vars set in kube-apiserver.yaml
+if [ '' != "$HTTP_PROXY" ] ; then
+    #  Note to explain the sed-fu below:
+    #   This deletes all lines from the one starting "env:" up to but not including the next tag with the same indentation
+    sudo sed -i -r -e '
+        /^\s\s\s\senv:.*$/,/^\s\s\s\s[a-zA-Z0-9]+:.*$/ {
+          /^\s\s\s\s[a-zA-Z0-9]+:.*$/ !{
+           d
+          }
+        }
+    ' -e '/^\s\s\s\senv:.*$/d' /etc/kubernetes/manifests/kube-apiserver.yaml
+
+    sudo systemctl restart kubelet
+fi
