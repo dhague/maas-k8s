@@ -57,14 +57,14 @@ openssl pkcs12 -inkey ~/k8s-admin-key.cer -in ~/k8s-admin-cert.cer -export -out 
 # Get rid of the (proxy) env vars set in kube-apiserver.yaml
 if [ '' != "$HTTP_PROXY" ] ; then
     #  Note to explain the sed-fu below:
-    #   This deletes all lines from the one starting "env:" up to but not including the next tag with the same indentation
+    #   This deletes all lines from the one starting "    env:" up to but not including the next tag with the same indentation
     sudo sed -i -r -e '
-        /^\s\s\s\senv:.*$/,/^\s\s\s\s[a-zA-Z0-9]+:.*$/ {
-          /^\s\s\s\s[a-zA-Z0-9]+:.*$/ !{
+        /^\s{4}env:.*$/,/^\s{4}[a-zA-Z0-9\-]+:.*$/ {
+          /^\s{4}[a-zA-Z0-9\-]+:.*$/ !{
            d
           }
         }
-    ' -e '/^\s\s\s\senv:.*$/d' /etc/kubernetes/manifests/kube-apiserver.yaml
+    ' -e '/^\s{4}env:.*$/d' /etc/kubernetes/manifests/kube-apiserver.yaml
 
     sudo systemctl restart kubelet
 fi
