@@ -38,6 +38,11 @@ mkdir -p $HOME/.kube
 sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+# Allow pods to be scheduled to the master, if so configured
+if [ -n "$SCHEDULE_TO_MASTER" ] ; then
+    kubectl taint nodes --all node-role.kubernetes.io/master-
+fi
+
 if [ "$POD_NETWORK" == "calico" ] ; then
     # Set up Calico pod networking
     kubectl apply -f https://docs.projectcalico.org/v2.4/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
@@ -71,8 +76,4 @@ if [ '' != "$HTTP_PROXY" ] ; then
     ' -e '/^\s{4}env:.*$/d' /etc/kubernetes/manifests/kube-apiserver.yaml
 
     sudo systemctl restart kubelet
-fi
-
-if [ -n "$SCHEDULE_TO_MASTER" ] ; then
-    kubectl taint nodes --all node-role.kubernetes.io/master-
 fi
