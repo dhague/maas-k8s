@@ -1,0 +1,4 @@
+apiVersion: v1
+description: NFS server running in a pod sharing path from host
+name: nfs-server
+version: 0.0.1

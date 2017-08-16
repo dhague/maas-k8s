@@ -72,3 +72,7 @@ if [ '' != "$HTTP_PROXY" ] ; then
 
     sudo systemctl restart kubelet
 fi
+
+if [ -n "$SCHEDULE_TO_MASTER" ] ; then
+    kubectl taint nodes --all node-role.kubernetes.io/master-
+fi
