@@ -76,4 +76,10 @@ if [ '' != "$HTTP_PROXY" ] ; then
     ' -e '/^\s{4}env:.*$/d' /etc/kubernetes/manifests/kube-apiserver.yaml
 
     sudo systemctl restart kubelet
+
+    echo 'Restarted kubelet - wait for control plane to come back'
+    until (kubectl -n=kube-system get pods | grep -q READY) ; do
+        sleep 10
+    done
+
 fi

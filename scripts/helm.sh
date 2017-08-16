@@ -6,8 +6,8 @@ if [ -z ${helm+x} ]; then
     ./get_helm.sh
     kubectl create clusterrolebinding kube-system-default-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
     helm init
-    echo 'Waiting up to 5 minutes for Helm Tiller pod to enter state "Running"'
-    for i in {1..60}
+    echo 'Waiting up to 15 minutes for Helm Tiller pod to enter state "Running"'
+    for i in {1..180}
     do
        if (kubectl -n=kube-system get pods | grep tiller-deploy | grep -q Running) ; then
          export helm=installed

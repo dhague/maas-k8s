@@ -14,4 +14,4 @@ fi
 CHART_NAME=nfs-server
 
 kubectl create namespace $CHART_NAME
-helm upgrade $HELM_VALUES $CHART_NAME ./helm-charts/$CHART_NAME --namespace $CHART_NAME --install
+helm upgrade $HELM_VALUES $CHART_NAME ../helm-charts/$CHART_NAME --namespace $CHART_NAME --install
