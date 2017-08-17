@@ -1,0 +1,4 @@
+tensorflow:
+  image: "gcr.io/tensorflow/tensorflow"
+  gpu: false # Set to true in helm-values.yaml if deploying to an NVIDIA GPU node
+  numGpus: 0 # Ignored unless gpu=true

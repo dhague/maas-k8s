@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-tensorflow-nfs
+  annotations:
+    volume.beta.kubernetes.io/mount-options: "fsc"
+  labels:
+    nfs: "tensorflow"
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    # nfsServer.hostName should be defined for external NFS server
+    # nfsServer.hostIP should be defined for local K8S-hosted NFS server
+    server: {{ $.Values.nfsServer.hostName }}{{$.Values.nfsServer.hostIP}}
+    path: {{ $.Values.nfsServer.hostPath }}/{{ $.Release.Namespace }}
+    readOnly: false

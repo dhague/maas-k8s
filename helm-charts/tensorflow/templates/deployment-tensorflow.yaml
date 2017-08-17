@@ -1,0 +1,44 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: tensorflow
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: tensorflow
+        app: tensorflow
+    spec:
+      containers:
+      - name: tensorflow
+        image: {{$.Values.tensorflow.image}}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8888
+{{ if $.Values.tensorflow.gpu }}
+        env:
+        - name: LD_LIBRARY_PATH
+          value: /usr/local/nvidia
+        resources:
+          limits:
+            alpha.kubernetes.io/nvidia-gpu: {{ $.Values.tensorflow.numGpus }}
+{{ end }}
+        volumeMounts:
+{{ if $.Values.tensorflow.gpu }}
+        - name: nvidia-driver
+          mountPath: /usr/local/nvidia/
+          readOnly: true
+{{ end }}
+        - name: nfs
+          mountPath: "/notebooks"
+          readOnly: false
+      volumes:
+{{ if $.Values.tensorflow.gpu }}
+      - name: nvidia-driver
+        hostPath:
+          path: /usr/local/lib/nvidia
+{{ end }}
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: pvc-tensorflow-nfs
