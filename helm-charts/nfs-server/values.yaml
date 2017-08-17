@@ -1,2 +1,3 @@
 nfsServer:
+  hostIP: # Set in <cluster>/helm-values.yaml - should be a K8S cluster IP
   hostPath: /exports # Sensible default
